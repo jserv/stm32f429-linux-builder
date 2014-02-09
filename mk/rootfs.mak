@@ -11,7 +11,7 @@ busybox:
 		CFLAGS=$(ROOTFS_CFLAGS) SKIP_STRIP=y \
 		CONFIG_PREFIX=$(target_out_romfs) install
 
-$(rootfs_target): $(rootfs_dir)
+$(rootfs_target): $(rootfs_dir) $(target_out_busybox)/.config
 	cp -af $(rootfs_dir)/* $(target_out_romfs)
 	cd $(target_out) && genromfs -v \
 		-V "ROM Disk" \
