@@ -10,7 +10,14 @@ rootfs_target := $(target_out)/romfs.bin
 
 # toolchain configurations
 CROSS_COMPILE ?= arm-uclinuxeabi-
-ROOTFS_CFLAGS := "-march=armv7-m -mthumb -Wl,-elf2flt=-s -Wl,-elf2flt=16384"
+ROOTFS_CFLAGS := "-march=armv7-m -mtune=cortex-m4 \
+-mlittle-endian -mthumb \
+-Os -ffast-math \
+-ffunction-sections -fdata-sections \
+-Wl,--gc-sections \
+-fno-common \
+--param max-inline-insns-single=1000 \
+-Wl,-elf2flt=-s -Wl,-elf2flt=16384"
 
 .PHONY: all prepare uboot kernel rootfs
 all: prepare stamp-uboot stamp-kernel stamp-rootfs
