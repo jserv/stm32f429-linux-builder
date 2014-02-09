@@ -2,6 +2,8 @@ root_dir := $(shell pwd)
 
 include configs/sources
 
+include mk/defs.mak
+
 uboot_target :=  $(target_out)/uboot/u-boot.bin
 kernel_target := $(target_out)/kernel/arch/arm/boot/xipuImage.bin
 rootfs_target := $(target_out)/romfs.bin
@@ -9,8 +11,6 @@ rootfs_target := $(target_out)/romfs.bin
 # toolchain configurations
 CROSS_COMPILE ?= arm-uclinuxeabi-
 ROOTFS_CFLAGS := "-march=armv7-m -mthumb -Wl,-elf2flt=-s -Wl,-elf2flt=16384"
-
-include mk/defs.mak
 
 .PHONY: all prepare uboot kernel rootfs
 all: prepare stamp-uboot stamp-kernel stamp-rootfs
