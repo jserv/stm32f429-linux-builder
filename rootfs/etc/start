@@ -6,9 +6,15 @@
 /usr/bin/extract /ramfs.img /dev/ram0
 
 # mount ramdisk, proc, sysfs
-/bin/mount -t ext2 /dev/ram0 /var
 /bin/mount -t proc proc /proc
 /bin/mount -t sysfs sysfs /sys
+
+# load ext2
+/sbin/insmod /lib/modules/mbcache.ko
+/sbin/insmod /lib/modules/ext2.ko
+
+# mount ramdisk
+/bin/mount -t ext2 /dev/ram0 /var
 
 # disable virtual console blanking
 # /bin/echo -e '\033[9;0]\033[14;0]' > /dev/console

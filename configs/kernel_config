@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
 # Linux kernel version: 2.6.33
-# Sun Feb  9 17:56:33 2014
+# Sun Feb  9 22:34:29 2014
 #
 CONFIG_ARM=y
 CONFIG_SYS_SUPPORTS_APM_EMULATION=y
@@ -667,13 +667,13 @@ CONFIG_RTC_LIB=y
 #
 # File systems
 #
-CONFIG_EXT2_FS=y
+CONFIG_EXT2_FS=m
 CONFIG_EXT2_FS_XATTR=y
 CONFIG_EXT2_FS_POSIX_ACL=y
 CONFIG_EXT2_FS_SECURITY=y
 # CONFIG_EXT3_FS is not set
 # CONFIG_EXT4_FS is not set
-CONFIG_FS_MBCACHE=y
+CONFIG_FS_MBCACHE=m
 # CONFIG_REISERFS_FS is not set
 # CONFIG_JFS_FS is not set
 CONFIG_FS_POSIX_ACL=y
