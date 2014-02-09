@@ -16,4 +16,5 @@ $(rootfs_target): $(rootfs_dir)
 	cd $(target_out) && genromfs -v \
 		-V "ROM Disk" \
 		-f romfs.bin \
+		-x placeholder \
 		-d $(target_out_romfs) 2> $(target_out)/romfs.map
