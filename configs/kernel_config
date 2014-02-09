@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
 # Linux kernel version: 2.6.33
-# Sun Feb  9 22:34:29 2014
+# Sun Feb  9 22:54:27 2014
 #
 CONFIG_ARM=y
 CONFIG_SYS_SUPPORTS_APM_EMULATION=y
@@ -430,8 +430,7 @@ CONFIG_MTD_UCLINUX_PHYADDR=0x08120000
 # CONFIG_PARPORT is not set
 CONFIG_BLK_DEV=y
 # CONFIG_BLK_DEV_COW_COMMON is not set
-CONFIG_BLK_DEV_LOOP=y
-# CONFIG_BLK_DEV_CRYPTOLOOP is not set
+# CONFIG_BLK_DEV_LOOP is not set
 
 #
 # DRBD disabled because PROC_FS, INET or CONNECTOR not selected
