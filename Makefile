@@ -2,22 +2,15 @@ root_dir := $(shell pwd)
 
 include configs/sources
 
-uboot_dir := $(root_dir)/$(uboot_version)
-kernel_dir := $(root_dir)/$(kernel_version)
-busybox_dir := $(root_dir)/$(busybox_version)
-rootfs_dir := $(root_dir)/rootfs
-
-target_out := $(root_dir)/out
-download_dir := $(root_dir)/downloads
-
 uboot_target :=  $(target_out)/uboot/u-boot.bin
 kernel_target := $(target_out)/kernel/arch/arm/boot/xipuImage.bin
 rootfs_target := $(target_out)/romfs.bin
-TARGETS := $(uboot_target) $(kernel_target) $(rootfs_target)
 
 # toolchain configurations
 CROSS_COMPILE ?= arm-uclinuxeabi-
 ROOTFS_CFLAGS := "-march=armv7-m -mthumb -Wl,-elf2flt=-s -Wl,-elf2flt=16384"
+
+include mk/defs.mak
 
 .PHONY: all prepare uboot kernel rootfs
 all: prepare stamp-uboot stamp-kernel stamp-rootfs
@@ -31,11 +24,10 @@ stamp-uboot:
 	$(MAKE) build-uboot
 	touch $@
 build-uboot:
-	@echo $(uboot_version) $(uboot_config)
-	$(shell mkdir -p ${target_out}/uboot)
+	$(shell mkdir -p ${target_out_uboot})
 	env LC_ALL=C make -C $(uboot_dir) \
 		ARCH=arm CROSS_COMPILE=$(CROSS_COMPILE) \
-		O=$(target_out)/uboot \
+		O=$(target_out_uboot) \
 		stm32429-disco
 
 uboot_clean:
@@ -45,23 +37,23 @@ uboot_clean:
 stamp-kernel:
 	$(MAKE) build-kernel
 	touch $@
-build-kernel: $(target_out)/uboot/tools/mkimage
-	$(shell mkdir -p ${target_out}/kernel)
+build-kernel: $(target_out_uboot)/tools/mkimage
+	$(shell mkdir -p ${target_out_kernel})
 	cp -f configs/kernel_config $(target_out)/kernel/.config
-	env PATH=$(target_out)/uboot:$(PATH) make -C $(kernel_dir) \
+	env PATH=$(target_out_uboot)/tools:$(PATH) make -C $(kernel_dir) \
 		ARCH=arm CROSS_COMPILE=$(CROSS_COMPILE) \
-		O=$(target_out)/kernel oldconfig xipImage
+		O=$(target_out_kernel) oldconfig xipImage
 	cat $(kernel_dir)/arch/arm/boot/tempfile \
-	    $(target_out)/kernel/arch/arm/boot/xipImage > $(target_out)/kernel/arch/arm/boot/xipImage.bin
-	$(target_out)/uboot/tools/mkimage \
+	    $(target_out_kernel)/arch/arm/boot/xipImage > $(target_out_kernel)/arch/arm/boot/xipImage.bin
+	$(target_out_uboot)/tools/mkimage \
 		-x -A arm -O linux -T kernel -C none \
 		-a 0x08020040 -e 0x08020041 \
 		-n "Linux-2.6.33-arm1" \
-		-d $(target_out)/kernel/arch/arm/boot/xipImage.bin \
-		$(target_out)/kernel/arch/arm/boot/xipuImage.bin
+		-d $(target_out_kernel)/arch/arm/boot/xipImage.bin \
+		$(target_out_kernel)/arch/arm/boot/xipuImage.bin
 
 kernel_clean:
-	rm -rf $(target_out)/kernel stamp-kernel
+	rm -rf $(target_out_kernel) stamp-kernel
 
 # Root file system
 stamp-rootfs:
@@ -70,25 +62,25 @@ stamp-rootfs:
 build-rootfs: busybox $(rootfs_target)
 
 busybox:
-	$(shell mkdir -p ${target_out}/busybox)
-	$(shell mkdir -p ${target_out}/romfs)
-	cp -f configs/busybox_config $(target_out)/busybox/.config
+	$(shell mkdir -p ${target_out_busybox})
+	$(shell mkdir -p ${target_out_romfs})
+	cp -f configs/busybox_config $(target_out_busybox)/.config
 	make -C $(busybox_dir) \
-		O=$(target_out)/busybox oldconfig
-	make -C $(target_out)/busybox \
+		O=$(target_out_busybox) oldconfig
+	make -C $(target_out_busybox) \
 		ARCH=arm CROSS_COMPILE=$(CROSS_COMPILE) \
 		CFLAGS=$(ROOTFS_CFLAGS) SKIP_STRIP=y \
-		CONFIG_PREFIX=$(target_out)/romfs install
+		CONFIG_PREFIX=$(target_out_romfs) install
 
 $(rootfs_target): $(rootfs_dir)
-	cp -af $(rootfs_dir)/* $(target_out)/romfs
+	cp -af $(rootfs_dir)/* $(target_out_romfs)
 	cd $(target_out) && genromfs -v \
 		-V "ROM Disk" \
 		-f romfs.bin \
-		-d $(target_out)/romfs 2> $(target_out)/romfs.map
+		-d $(target_out_romfs) 2> $(target_out)/romfs.map
 
 rootfs_clean:
-	rm -rf $(target_out)/busybox $(target_out)/romfs stamp-rootfs
+	rm -rf $(target_out_busybox) $(target_out_romfs) stamp-rootfs
 
 .PHONY += install
 install: $(TARGETS)
