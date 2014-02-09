@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
 # Linux kernel version: 2.6.33
-# Sun Feb  9 22:54:27 2014
+# Sun Feb  9 23:08:35 2014
 #
 CONFIG_ARM=y
 CONFIG_SYS_SUPPORTS_APM_EMULATION=y
@@ -679,7 +679,7 @@ CONFIG_FS_POSIX_ACL=y
 # CONFIG_XFS_FS is not set
 # CONFIG_BTRFS_FS is not set
 # CONFIG_NILFS2_FS is not set
-CONFIG_FILE_LOCKING=y
+# CONFIG_FILE_LOCKING is not set
 # CONFIG_FSNOTIFY is not set
 # CONFIG_DNOTIFY is not set
 # CONFIG_INOTIFY is not set
