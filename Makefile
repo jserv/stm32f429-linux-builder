@@ -23,13 +23,7 @@ include mk/download.mak
 stamp-uboot:
 	$(MAKE) build-uboot
 	touch $@
-build-uboot:
-	$(shell mkdir -p ${target_out_uboot})
-	env LC_ALL=C make -C $(uboot_dir) \
-		ARCH=arm CROSS_COMPILE=$(CROSS_COMPILE) \
-		O=$(target_out_uboot) \
-		stm32429-disco
-
+include mk/uboot.mak
 uboot_clean:
 	rm -rf $(target_out)/uboot stamp-uboot
 
@@ -37,21 +31,7 @@ uboot_clean:
 stamp-kernel:
 	$(MAKE) build-kernel
 	touch $@
-build-kernel: $(target_out_uboot)/tools/mkimage
-	$(shell mkdir -p ${target_out_kernel})
-	cp -f configs/kernel_config $(target_out)/kernel/.config
-	env PATH=$(target_out_uboot)/tools:$(PATH) make -C $(kernel_dir) \
-		ARCH=arm CROSS_COMPILE=$(CROSS_COMPILE) \
-		O=$(target_out_kernel) oldconfig xipImage
-	cat $(kernel_dir)/arch/arm/boot/tempfile \
-	    $(target_out_kernel)/arch/arm/boot/xipImage > $(target_out_kernel)/arch/arm/boot/xipImage.bin
-	$(target_out_uboot)/tools/mkimage \
-		-x -A arm -O linux -T kernel -C none \
-		-a 0x08020040 -e 0x08020041 \
-		-n "Linux-2.6.33-arm1" \
-		-d $(target_out_kernel)/arch/arm/boot/xipImage.bin \
-		$(target_out_kernel)/arch/arm/boot/xipuImage.bin
-
+include mk/kernel.mak
 kernel_clean:
 	rm -rf $(target_out_kernel) stamp-kernel
 
@@ -59,26 +39,7 @@ kernel_clean:
 stamp-rootfs:
 	$(MAKE) build-rootfs
 	touch $@
-build-rootfs: busybox $(rootfs_target)
-
-busybox:
-	$(shell mkdir -p ${target_out_busybox})
-	$(shell mkdir -p ${target_out_romfs})
-	cp -f configs/busybox_config $(target_out_busybox)/.config
-	make -C $(busybox_dir) \
-		O=$(target_out_busybox) oldconfig
-	make -C $(target_out_busybox) \
-		ARCH=arm CROSS_COMPILE=$(CROSS_COMPILE) \
-		CFLAGS=$(ROOTFS_CFLAGS) SKIP_STRIP=y \
-		CONFIG_PREFIX=$(target_out_romfs) install
-
-$(rootfs_target): $(rootfs_dir)
-	cp -af $(rootfs_dir)/* $(target_out_romfs)
-	cd $(target_out) && genromfs -v \
-		-V "ROM Disk" \
-		-f romfs.bin \
-		-d $(target_out_romfs) 2> $(target_out)/romfs.map
-
+include mk/rootfs.mak
 rootfs_clean:
 	rm -rf $(target_out_busybox) $(target_out_romfs) stamp-rootfs
 
