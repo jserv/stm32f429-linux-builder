@@ -1,0 +1,11 @@
+# fetched sources
+/downloads
+/busybox-*
+/u-boot
+/uclinux
+
+# generated
+/out
+stamp-kernel
+stamp-rootfs
+stamp-uboot
