@@ -44,18 +44,9 @@ rootfs_clean:
 	rm -rf $(target_out_busybox) $(target_out_romfs) stamp-rootfs
 
 .PHONY += install
+include mk/flash.mak
 install: $(TARGETS)
-	openocd \
-		-f interface/stlink-v2.cfg \
-		-f target/stm32f4x_stlink.cfg \
-		-c "init" \
-		-c "reset init" \
-        	-c "flash probe 0" \
-	        -c "flash info 0" \
-		-c "flash write_image erase $(uboot_target)  0x08000000" \
-		-c "flash write_image erase $(kernel_target) 0x08020000" \
-		-c "flash write_image erase $(rootfs_target) 0x08120000" \
-		-c "reset run" -c shutdown
+	$(shell ${FLASH_CMD})
 
 .PHONY += clean
 clean: uboot_clean kernel_clean rootfs_clean
