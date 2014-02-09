@@ -59,13 +59,14 @@ a PC serial port.
 Most PCs today come without an native RS232 port, thus an USB to serial
 converter is also needed.
 
-In this example, we simply connect the RX of the STM32 USART1 to the TX of the FT232RL, and the TX of the USART1 to the RX of the FT232RL. 
-
-PC10 -> TXD
-PC11 -> RXD
+For example, we can simply connect the RX of the STM32 USART3 to the TX of
+the converter, and the TX of the USART3 to the RX of the converter:
+* pin PC10 -> TXD
+* pin PC11 -> RXD
 
 
 Reference Boot Messages
+=======================
 ```
 U-Boot 2010.03-00003-g934021a ( Feb 09 2014 - 17:42:47)
 

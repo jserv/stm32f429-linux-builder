@@ -1,8 +1,6 @@
 root_dir := $(shell pwd)
 
-uboot_version := u-boot
-kernel_version := uclinux
-busybox_version := busybox-1.22.1
+include configs/sources
 
 uboot_dir := $(root_dir)/$(uboot_version)
 kernel_dir := $(root_dir)/$(kernel_version)
@@ -17,49 +15,16 @@ kernel_target := $(target_out)/kernel/arch/arm/boot/xipuImage.bin
 rootfs_target := $(target_out)/romfs.bin
 TARGETS := $(uboot_target) $(kernel_target) $(rootfs_target)
 
+# toolchain configurations
+CROSS_COMPILE ?= arm-uclinuxeabi-
+ROOTFS_CFLAGS := "-march=armv7-m -mthumb -Wl,-elf2flt=-s -Wl,-elf2flt=16384"
+
 .PHONY: all prepare uboot kernel rootfs
 all: prepare stamp-uboot stamp-kernel stamp-rootfs
 
 prepare:
 
-CROSS_COMPILE ?= arm-uclinuxeabi-
-
-ROOTFS_CFLAGS := "-march=armv7-m -mthumb -Wl,-elf2flt=-s -Wl,-elf2flt=16384"
-
-# downloads and temporary output directory
-$(shell mkdir -p $(target_out))
-$(shell mkdir -p $(download_dir))
-
-# Check cross compiler
-filesystem_path := $(shell which ${CROSS_COMPILE}gcc 2>/dev/null)
-ifeq ($(strip $(filesystem_path)),)
-$(error No uClinux toolchain found)
-endif
-
-# Check u-boot
-filesystem_path := $(shell ls $(uboot_dir) 2>/dev/null)
-ifeq ($(strip $(filesystem_path)),)
-$(info *** Fetching u-boot source ***)
-$(info $(shell git clone git@github.com:robutest/u-boot.git))
-$(info **********************************)
-endif
-
-# Check kernel
-filesystem_path := $(shell ls $(kernel_dir) 2>/dev/null)
-ifeq ($(strip $(filesystem_path)),)
-$(info *** Fetching uClinux source ***)
-$(info $(shell git clone git@github.com:robutest/uclinux.git))
-$(info **********************************)
-endif
-
-# Check busybox
-filesystem_path := $(shell ls $(busybox_dir) 2>/dev/null)
-ifeq ($(strip $(filesystem_path)),)
-$(info *** Fetching busybox source ***)
-$(info $(shell wget -P downloads -c http://busybox.net/downloads/${busybox_version}.tar.bz2))
-$(info $(shell tar -jxf downloads/${busybox_version}.tar.bz2 -C $(root_dir)))
-$(info **********************************)
-endif
+include mk/download.mak
 
 # u-boot
 stamp-uboot:

@@ -1,0 +1,9 @@
+# source defintions
+
+uboot_version := u-boot
+kernel_version := uclinux
+busybox_version := busybox-1.22.1
+
+FETCH_CMD_uboot := git clone https://github.com/robutest/u-boot.git
+FETCH_CMD_kernel := git clone https://github.com/robutest/uclinux.git
+FETCH_CMD_busybox := wget -P downloads -c http://busybox.net/downloads/${busybox_version}.tar.bz2
