@@ -21,9 +21,10 @@ the build procedure:
     make
     sudo make install
 ```
-* ARM/uClinux Toolchain
+* Set ARM/uClinux Toolchain:
+  - Download [arm-2010q1-189-arm-uclinuxeabi-i686-pc-linux-gnu.tar.bz2](http://www.codesourcery.com/sgpp/lite/arm/portal/package6503/public/arm-uclinuxeabi/arm-2010q1-189-arm-uclinuxeabi-i686-pc-linux-gnu.tar.bz2) from CodeSourcery
+  - only arm-2010q1 is known to work; don't use SourceryG++ arm-2011.03
 ```
-    wget http://www.codesourcery.com/sgpp/lite/arm/portal/package6503/public/arm-uclinuxeabi/arm-2010q1-189-arm-uclinuxeabi-i686-pc-linux-gnu.tar.bz2
     tar jxvf arm-2010q1-189-arm-uclinuxeabi-i686-pc-linux-gnu.tar.bz2
     export PATH=`pwd`/arm-2010q1/bin:$PATH
 ```
