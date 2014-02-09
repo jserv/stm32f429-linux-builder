@@ -23,9 +23,8 @@ the build procedure:
 ```
 * ARM/uClinux Toolchain
 ```
-    wget http://www.codesourcery.com/sgpp/lite/arm/portal/package6503/public/arm-uclinuxeabi/arm-2010q1-189-arm-uclinuxeabi-i686-pc-linux-gnu.tar.bz2
-    tar jxvf arm-2010q1-189-arm-uclinuxeabi-i686-pc-linux-gnu.tar.bz2
-    export PATH=`pwd`/arm-2010q1/bin:$PATH
+    tar jxvf [arm-2011.03-46-arm-uclinuxeabi-i686-pc-linux-gnu.tar.bz2](http://sourcery.mentor.com/sgpp/lite/arm/portal/package8744/public/arm-uclinuxeabi/arm-2011.03-46-arm-uclinuxeabi-i686-pc-linux-gnu.tar.bz2)
+    export PATH=`pwd`/arm-2011.03/bin:$PATH
 ```
 * [genromfs](http://romfs.sourceforge.net/)
 ```
