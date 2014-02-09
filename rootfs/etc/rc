@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# put the linux icon
+/bin/cat /etc/motd
+
+# that's it... success
+exit 0
