@@ -12,6 +12,9 @@ The builder requires that various tools and packages be available for use in
 the build procedure:
 
 * [OpenOCD](http://openocd.sourceforge.net/)
+  - OpenOCD 0.7.0 (and the 0.7.0-2 from Debian) can't write romfs to flash
+    because of a post-0.7.0-stable bug (bad flash detection on stm32f429).
+    You need to use 0.8.0 development version.
 ```
     git clone git://git.code.sf.net/p/openocd/code openocd
     cd openocd
