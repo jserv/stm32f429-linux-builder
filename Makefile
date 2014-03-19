@@ -31,7 +31,7 @@ stamp-uboot:
 	$(MAKE) build-uboot
 	touch $@
 include mk/uboot.mak
-uboot_clean:
+clean-uboot:
 	rm -rf $(target_out)/uboot stamp-uboot
 
 # Linux kernel
@@ -39,7 +39,7 @@ stamp-kernel:
 	$(MAKE) build-kernel
 	touch $@
 include mk/kernel.mak
-kernel_clean:
+clean-kernel:
 	rm -rf $(target_out_kernel) stamp-kernel
 
 # Root file system
@@ -47,7 +47,7 @@ stamp-rootfs:
 	$(MAKE) build-rootfs
 	touch $@
 include mk/rootfs.mak
-rootfs_clean:
+clean-rootfs:
 	rm -rf $(target_out_busybox) $(target_out_romfs) stamp-rootfs
 
 .PHONY += install
@@ -56,7 +56,7 @@ install: $(TARGETS)
 	$(shell ${FLASH_CMD})
 
 .PHONY += clean
-clean: uboot_clean kernel_clean rootfs_clean
+clean: clean-uboot clean-kernel clean-rootfs
 	rm -rf $(target_out)
 
 .PHONY += distclean
@@ -68,13 +68,13 @@ help:
 	@echo "Avaialble commands:"
 	@echo
 	@echo "build the u-boot:"
-	@echo "    make build-uboot; make uboot_clean"
+	@echo "    make build-uboot; make clean-uboot"
 	@echo
 	@echo "build the Linux kernel:"
-	@echo "    make build-kernel; make kernel_clean"
+	@echo "    make build-kernel; make clean-kernel"
 	@echo
 	@echo "build the root file system:"
-	@echo "    make build-rootfs; make rootfs_clean"
+	@echo "    make build-rootfs; make clean-rootfs"
 	@echo
 	@echo "clean the targets:"
 	@echo "    make clean"
