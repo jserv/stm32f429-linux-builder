@@ -51,7 +51,7 @@ Be patient when OpenOCD is flashing. Typically, it takes about 55 seconds.
 Use `make help` to get detailed build targets.
 
 
-# Bug Fixes
+# 64-bit System Support
 
 ## 1. GNU Toolchain
 
