@@ -35,7 +35,47 @@ the build procedure:
 ```
     sudo apt-get install genromfs
 ```
+* GNU Toolchain
 
+  - We extensively rely on the GNU toolchain to streamline our development process. At its core, we utilize the "Make" utility as the orchestration engine, automating the compilation and building of our source code. With a meticulously crafted Makefile, we define rules and dependencies necessary for compiling, linking, and generating binary images from our codebase.
+
+
+  - Open a terminal and update your package repository to ensure you have the latest information about available packages.
+
+```bash
+    sudo apt update
+```
+  - Use the package manager to install the GNU Toolchain, which includes tools like gcc, g++, and binutils.
+
+```bash
+    sudo apt-get install build-essential
+```
+
+  - After the installation is complete, you can verify it by checking the installed version of GCC.
+
+```bash
+    gcc --version
+```
+* STLINK Tools
+  - To facilitate programming and downloading firmware to the microcontroller, we use the ST-Link V2, a critical component in our project workflow. Here are the steps for its installation:
+
+```bash
+    cd ~
+    git clone https://github.com/texane/stlink.git
+    cd ./stlink
+    sudo apt-get install libusb-1.0-0-dev
+    sudo apt-get -y install cmake
+    sudo apt-get install libstlink1
+    make
+    cd build/Release
+    sudo make install
+```
+
+  - To verify the successful installation of ST-Link V2 and confirm its functionality, execute the following command:
+```bash
+    st-flash
+```
+  - Upon execution, the terminal should display a response indicating that ST-Link V2 is installed and ready for use.
 
 Build Instructions
 ==================
@@ -50,6 +90,34 @@ Build Instructions
 Be patient when OpenOCD is flashing. Typically, it takes about 55 seconds.
 Use `make help` to get detailed build targets.
 
+
+## 64-bit System Support
+Since the ARM-2010q1 toolchain is intended for 32-bit systems and if your system is 64-bit, you'll need to enable 32-bit support and install necessary libraries. Execute the following commands:
+```bash
+    sudo dpkg --add-architecture i386
+    sudo apt-get update
+    sudo apt-get install libc6:i386 libncurses5:i386 libstdc++6:i386
+```
+
+## "timeconst.pl" Script Error 
+To resolve the Perl-related error, we need to edit the "timeconst.pl" script. We can use a text editor like nano:
+```bash
+    nano uclinux/kernel/timeconst.pl
+```
+In the "timeconst.pl" script, locate the problematic line (line 373) that checks for defined array values. Change the line from:
+```perl
+    if (! defined(@val)) {
+```
+to:
+```perl
+    if (!@val) {
+```
+This modification adjusts the logic to check if the array @val is empty rather than if it’s defined. Save the changes to the "timeconst.pl" file and exit the text editor.
+After making the modification, attempt to build the kernel again:
+```bash
+    make
+```
+Now, the build process should proceed without encountering the Perl-related error, enabling the successful building of the kernel for our STM32F429 project.
 
 USART Connection
 ================
