@@ -51,16 +51,16 @@ Be patient when OpenOCD is flashing. Typically, it takes about 55 seconds.
 Use `make help` to get detailed build targets.
 
 
-# 64-bit System Support
+## 64-bit System Support
 Since the ARM-2010q1 toolchain is intended for 32-bit systems and if your system is 64-bit, you'll need to enable 32-bit support and install necessary libraries. Execute the following commands:
 ```bash
     sudo dpkg --add-architecture i386
     sudo apt-get update
     sudo apt-get install libc6:i386 libncurses5:i386 libstdc++6:i386
 ```
-# Prerequisites
+## Prerequisites
 
-## 1. GNU Toolchain
+### 1. GNU Toolchain
 
 We extensively rely on the GNU toolchain to streamline our development process. At its core, we utilize the "Make" utility as the orchestration engine, automating the compilation and building of our source code. With a meticulously crafted Makefile, we define rules and dependencies necessary for compiling, linking, and generating binary images from our codebase.
 
@@ -82,7 +82,7 @@ After the installation is complete, you can verify it by checking the installed 
     gcc --version
 ```
 
-## 2. STLINK Tools
+### 2. STLINK Tools
 To facilitate programming and downloading firmware to the microcontroller, we use the ST-Link V2, a critical component in our project workflow. Here are the steps for its installation:
 
 ```bash
@@ -103,7 +103,7 @@ To verify the successful installation of ST-Link V2 and confirm its functionalit
 ```
 Upon execution, the terminal should display a response indicating that ST-Link V2 is installed and ready for use.
 
-# "timeconst.pl" Script Error 
+## "timeconst.pl" Script Error 
 To resolve the Perl-related error, we need to edit the "timeconst.pl" script. We can use a text editor like nano:
 ```bash
     nano uclinux/kernel/timeconst.pl
